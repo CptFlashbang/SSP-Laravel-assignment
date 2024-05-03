@@ -9,11 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('pizza_topping', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->foreignId('pizza_id')->constrained()->onDelete('cascade');
+            $table->foreignId('topping_id')->constrained()->onDelete('cascade');
+            $table->primary(['pizza_id', 'topping_id']);
         });
     }
 
