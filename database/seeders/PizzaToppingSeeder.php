@@ -1,11 +1,11 @@
 <?php
 
 namespace Database\Seeders;
-
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
-class Pizza_ToppingSeeder extends Seeder
+class PizzaToppingSeeder extends Seeder
 {
     /**
      * Run the database seeds.
