@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Topping extends Model
 {
     use HasFactory;
-    public function pizza(): BelongsTo
+    public function pizzas(): BelongsToMany
     {
-        return $this->belongsTo(Pizza::class);
+        return $this->belongsToMany(Pizza::class, 'pizza_topping');
     }
 }
