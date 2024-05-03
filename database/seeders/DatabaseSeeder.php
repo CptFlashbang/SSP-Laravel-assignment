@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PizzaSeeder::class,
             ToppingSeeder::class,
-            Pizza_ToppingSeeder::class,
+            PizzaToppingSeeder::class,
             OrderSeeder::class,
             OrderItemSeeder::class,
         ]);
