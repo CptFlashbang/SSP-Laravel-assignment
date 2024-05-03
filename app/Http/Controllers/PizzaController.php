@@ -11,9 +11,9 @@ class PizzaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(): View
     {
-        return response('Hello, World!');
+        return view('pizzas.index');
     }
 
     /**
