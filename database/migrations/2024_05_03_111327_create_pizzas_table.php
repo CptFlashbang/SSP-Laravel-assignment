@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('imagePath');
-            $table->string('SmallPrice');
-            $table->string('MediumPrice');
-            $table->string('LargePrice');
+            $table->double('SmallPrice');
+            $table->double('MediumPrice');
+            $table->double('LargePrice');
             $table->timestamps();
         });
     }
