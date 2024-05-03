@@ -6,22 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
+            $table->id();  // Single primary key for each order-pizza relationship
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
+            $table->foreignId('pizza_id')->constrained('pizzas')->onDelete('cascade');
+            $table->integer('quantity')->default(1);  // Store quantity of each pizza in the order
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('order_items');
     }
 };
+
