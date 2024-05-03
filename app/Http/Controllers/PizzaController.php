@@ -14,7 +14,9 @@ class PizzaController extends Controller
      */
     public function index(): View
     {
-        return view('pizzas.index');
+        return view('pizzas.list', [
+            'pizzas' => Pizza::with('toppings')->latest()->get(),
+        ]);
     }
 
     /**
