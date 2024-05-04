@@ -12,7 +12,7 @@ class ToppingController extends Controller
      */
     public function index()
     {
-        //
+        return Topping::all(); // This returns a Collection
     }
 
     /**

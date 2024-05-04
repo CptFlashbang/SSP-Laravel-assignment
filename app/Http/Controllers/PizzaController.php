@@ -7,17 +7,17 @@ use App\Models\Topping;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Illuminate\Database\Eloquent\Collection;
 
 class PizzaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(): Collection
     {
-        return view('pizzas.list', [
-            'pizzas' => Pizza::with('toppings')->latest()->get(),
-        ]);
+        $pizzas = Pizza::with('toppings')->latest()->get();
+        return $pizzas;
     }
     public function unlogged(): View
     {

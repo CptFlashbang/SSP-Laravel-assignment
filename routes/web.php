@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PizzaController;
+use App\Http\Controllers\ToppingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +16,18 @@ use App\Http\Controllers\PizzaController;
 |
 */
 
-Route::controller(PizzaController::class)->group(function () {
-    Route::get('/', 'unlogged'); // This will call the index method on PizzaController
+// Route::controller(PizzaController::class)->group(function () {
+//     Route::get('/', 'unlogged'); // This will call the index method on PizzaController
+// });
+
+Route::get('/', function (PizzaController $pizzaController, ToppingController $toppingController) {
+    $pizzas = $pizzaController->index();    // This returns a Collection
+    $toppings = $toppingController->index(); // Adjust ToppingController similarly
+
+    return view('welcome', [
+        'pizzas' => $pizzas,
+        'toppings' => $toppings
+    ]);
 });
 
 Route::get('/dashboard', function () {
