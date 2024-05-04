@@ -69,44 +69,51 @@ class OrderController extends Controller
     public function addPizzaToSession(Request $request, $pizzaId): RedirectResponse
     {
         $pizza = Pizza::findOrFail($pizzaId);
-        $order = session('order', collect([]))->all();  // Convert collection to array
+        $size = $request->input('size', 'small');
+        $price = $request->input('price', $pizza->{'SmallPrice'}); // Dynamically get the correct price
 
-        // Retrieve size and price from request
-        $size = $request->input('size');  // Assuming the size is sent via request
-        $price = $request->input('price', $pizza->SmallPrice); // Default to SmallPrice if not provided
-
-        // Define a unique identifier for each type and size of pizza
-        $uniqueIdentifier = $pizzaId . '_' . $size;
-
-        // Find existing pizza in the order
-        $found = array_search($uniqueIdentifier, array_column($order, 'uniqueIdentifier'));
-
-        if ($found !== false) {
-            // If found, increment the quantity
-            $order[$found]['quantity'] += 1;
-        } else {
-            // If not found, add new pizza with quantity 1
-            $order[] = [
-                'id' => $pizza->id,
-                'uniqueIdentifier' => $uniqueIdentifier,
-                'name' => $pizza->name,
-                'size' => $size,
-                'price' => $price,
-                'quantity' => 1
-            ];
+        // Retrieve an existing order from the session, or create a new one
+        $order = session('order');
+        if (!$order) {
+            $order = new Order();
+            if (auth()->check()) { // Ensure the user is logged in
+                $order->user_id = auth()->id(); // Set the user_id to the logged-in user's ID
+            } else {
+                // Handle the case where there is no logged-in user
+                return back()->withErrors('You must be logged in to place an order.');
+            }
+            $order->save(); // This is critical to ensure it has an ID
+            session(['order' => $order]); // Store only the order ID if preferable
         }
 
-        // Update the session with the modified order
-        session(['order' => collect($order)]);  // Convert array back to collection
+        // Add or update pizza in the order
+        $order->addOrUpdatePizza($pizza, $size, $price);
 
         return back()->with('success', 'Pizza added to order!');
     }
 
+
+
     public function viewSessionOrder(): View
     {
-        $order = session('order', collect([]));
+        $order = session('order'); // Retrieve the order from the session
+        $items = collect([]);
+
+        if ($order) {
+            // Assuming $order is an instance of Order, or similar
+            // You would adapt this part based on how you've structured Order items in the session
+            foreach ($order->orderItems as $item) {
+                $items->push([
+                    'size' => $item->size,
+                    'name' => $item->pizza->name, // Access the associated Pizza
+                    'quantity' => $item->quantity,
+                    'price' => $item->price,
+                ]);
+            }
+        }
+
         return view('orders.index', [
-            'pizzas' => $order
+            'pizzas' => $items
         ]);
     }
 
