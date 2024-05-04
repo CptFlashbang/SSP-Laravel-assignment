@@ -14,20 +14,10 @@ class PizzaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexCollection(): Collection
+    public function index(): Collection
     {
         $pizzas = Pizza::with('toppings')->latest()->get();
         return $pizzas;
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function indexView(): View
-    {
-        return view('pizzas.index', [
-            'pizzas' => Pizza::with('toppings')->latest()->get()
-        ]);
     }
 
     /**

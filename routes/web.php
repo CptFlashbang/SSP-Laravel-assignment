@@ -21,7 +21,7 @@ use App\Http\Controllers\ToppingController;
 // });
 
 Route::get('/', function (PizzaController $pizzaController, ToppingController $toppingController) {
-    $pizzas = $pizzaController->indexCollection();
+    $pizzas = $pizzaController->index();
     $toppings = $toppingController->index();
 
     return view('welcome', [
@@ -34,6 +34,16 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/menu', function (PizzaController $pizzaController, ToppingController $toppingController) {
+    $pizzas = $pizzaController->index();
+    $toppings = $toppingController->index();
+
+    return view('pizzas.index', [
+        'pizzas' => $pizzas,
+        'toppings' => $toppings
+    ]);
+})->middleware(['auth', 'verified'])->name('menu');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -41,18 +51,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('pizzas', PizzaController::class)
-    ->only(['store'])
+    ->only(['index', 'store'])
     ->middleware(['auth', 'verified']); 
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('pizzas', PizzaController::class)
-        ->only(['store']); // Only include store if it's the only standard method you need
-
-    Route::get('pizzas/collection', [PizzaController::class, 'indexCollection'])
-        ->name('pizzas.indexCollection');
-
-    Route::get('pizzas/view', [PizzaController::class, 'indexView'])
-        ->name('pizzas.indexView');
-});
 
 require __DIR__.'/auth.php';
