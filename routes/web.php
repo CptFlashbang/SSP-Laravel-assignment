@@ -15,8 +15,8 @@ use App\Http\Controllers\PizzaController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::controller(PizzaController::class)->group(function () {
+    Route::get('/', 'unlogged'); // This will call the index method on PizzaController
 });
 
 Route::get('/dashboard', function () {
