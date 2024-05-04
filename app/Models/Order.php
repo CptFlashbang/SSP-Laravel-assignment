@@ -21,24 +21,29 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function addOrUpdatePizza(Pizza $pizza, $size, $price)
+    public function addOrUpdatePizza(Order $order, Pizza $pizza, $size, $price)
     {
         $uniqueIdentifier = $pizza->id . '_' . $size;
-        $item = $this->orderItems->firstWhere('uniqueIdentifier', $uniqueIdentifier);
+        $item = $order->orderItems->first(function ($item) use ($uniqueIdentifier) {
+            return $item->uniqueIdentifier === $uniqueIdentifier;
+        });
 
         if ($item) {
-            // If found, increment the quantity
             $item->quantity += 1;
         } else {
-            // If not found, add new pizza with quantity 1
-            $this->orderItems()->create([
+            $item = new OrderItem([
+                'order_id' => $order->id,  // Ensure this is included
                 'pizza_id' => $pizza->id,
                 'size' => $size,
                 'price' => $price,
                 'quantity' => 1,
                 'uniqueIdentifier' => $uniqueIdentifier
             ]);
+            $order->orderItems->push($item);
         }
-        $this->save(); // Make sure changes are saved
+
+        // Now, explicitly save each item (if you want them in the database)
+        $item->save();  // This line will save the OrderItem to the database
     }
+
 }

@@ -15,6 +15,7 @@ class OrderItemSeeder extends Seeder
         // Let's assume we have some orders and pizzas
         $orderIds = DB::table('orders')->pluck('id');
         $pizzaIds = DB::table('pizzas')->pluck('id');
+        $sizes = ['small', 'medium', 'large'];  // Available sizes
 
         // Example logic to assign pizzas to orders
         foreach ($orderIds as $orderId) {
@@ -26,6 +27,7 @@ class OrderItemSeeder extends Seeder
                 DB::table('order_items')->insert([
                     'order_id' => $orderId,
                     'pizza_id' => $pizzaId,
+                    'size' => $sizes[array_rand($sizes)],  // Randomly assign a size
                     'quantity' => rand(1, 4),  // Random quantity between 1 and 4
                     'created_at' => now(),
                     'updated_at' => now(),

@@ -1,6 +1,7 @@
 <x-app-layout>
     <div class="container">
         <h1>Your Order</h1>
+
         @if ($pizzas->isEmpty())
             <p>Your cart is empty.</p>
         @else

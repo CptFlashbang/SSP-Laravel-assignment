@@ -68,29 +68,27 @@ class OrderController extends Controller
 
     public function addPizzaToSession(Request $request, $pizzaId): RedirectResponse
     {
-        $pizza = Pizza::findOrFail($pizzaId);
-        $size = $request->input('size', 'small');
-        $price = $request->input('price', $pizza->{'SmallPrice'}); // Dynamically get the correct price
-
-        // Retrieve an existing order from the session, or create a new one
         $order = session('order');
         if (!$order) {
             $order = new Order();
-            if (auth()->check()) { // Ensure the user is logged in
-                $order->user_id = auth()->id(); // Set the user_id to the logged-in user's ID
-            } else {
-                // Handle the case where there is no logged-in user
-                return back()->withErrors('You must be logged in to place an order.');
-            }
-            $order->save(); // This is critical to ensure it has an ID
-            session(['order' => $order]); // Store only the order ID if preferable
+            // Assuming a user is logged in for simplicity
+            $order->user_id = auth()->id();
+            $order->save();
         }
 
-        // Add or update pizza in the order
-        $order->addOrUpdatePizza($pizza, $size, $price);
+        // Add pizza to the order
+        $pizza = Pizza::findOrFail($pizzaId);
+        $size = $request->input('size', 'small');
+        $price = $request->input('price', $pizza->SmallPrice);
+
+        $order->addOrUpdatePizza($order, $pizza, $size, $price);
+
+        // Save the updated order back into the session
+        session(['order' => $order]);
 
         return back()->with('success', 'Pizza added to order!');
     }
+
 
 
 
