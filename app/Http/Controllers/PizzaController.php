@@ -68,16 +68,5 @@ class PizzaController extends Controller
         //
     }
 
-    /**
-    * Add the Chirp to Order
-    */
-   public function addToOrder(Chirp $chirp): RedirectResponse
-   {
-        $order = session('order', collect([]));
-        $order->push($chirp);
-        session(['order' => $order]);
-        return redirect(route('chirps.index'));
-
-
-   }
+    
 }
