@@ -19,13 +19,6 @@ class PizzaController extends Controller
         $pizzas = Pizza::with('toppings')->latest()->get();
         return $pizzas;
     }
-    public function unlogged(): View
-    {
-        return view('welcome', [
-            'pizzas' => Pizza::with('toppings')->latest()->get(),
-            'toppings' => Topping::all()
-        ]);
-    }
 
     /**
      * Show the form for creating a new resource.
