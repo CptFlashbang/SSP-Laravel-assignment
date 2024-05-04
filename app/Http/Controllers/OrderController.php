@@ -69,23 +69,36 @@ class OrderController extends Controller
     public function addPizzaToSession(Request $request, $pizzaId): RedirectResponse
     {
         $pizza = Pizza::findOrFail($pizzaId);
-        $order = session('order', collect([]));  // Retrieves the order from session, or initializes an empty collection
+        $order = session('order', collect([]))->all();  // Convert collection to array
 
-        // Check if the pizza already exists in the order
-        $exists = $order->where('id', $pizzaId)->count();
-        if ($exists) {
-            $order = $order->map(function ($item) use ($pizzaId) {
-                if ($item['id'] === $pizzaId) {
-                    $item['quantity'] += 1;  // Increment quantity if pizza is already in the order
-                }
-                return $item;
-            });
+        // Retrieve size and price from request
+        $size = $request->input('size');  // Assuming the size is sent via request
+        $price = $request->input('price', $pizza->SmallPrice); // Default to SmallPrice if not provided
+
+        // Define a unique identifier for each type and size of pizza
+        $uniqueIdentifier = $pizzaId . '_' . $size;
+
+        // Find existing pizza in the order
+        $found = array_search($uniqueIdentifier, array_column($order, 'uniqueIdentifier'));
+
+        if ($found !== false) {
+            // If found, increment the quantity
+            $order[$found]['quantity'] += 1;
         } else {
-            // If not exists, add the pizza with quantity 1
-            $order->push(['id' => $pizza->id, 'name' => $pizza->name, 'price' => $request->price, 'quantity' => 1]);
+            // If not found, add new pizza with quantity 1
+            $order[] = [
+                'id' => $pizza->id,
+                'uniqueIdentifier' => $uniqueIdentifier,
+                'name' => $pizza->name,
+                'size' => $size,
+                'price' => $price,
+                'quantity' => 1
+            ];
         }
 
-        session(['order' => $order]);
+        // Update the session with the modified order
+        session(['order' => collect($order)]);  // Convert array back to collection
+
         return back()->with('success', 'Pizza added to order!');
     }
 
@@ -95,5 +108,11 @@ class OrderController extends Controller
         return view('orders.index', [
             'pizzas' => $order
         ]);
+    }
+
+    public function clearSession(Request $request): RedirectResponse
+    {
+        $request->session()->flush();
+        return redirect('/')->with('message', 'All session data cleared.');
     }
 }

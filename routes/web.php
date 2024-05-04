@@ -59,4 +59,8 @@ Route::resource('pizzas', PizzaController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']); 
 
+Route::post('session/clear', [OrderController::class, 'clearSession'])
+->name('session.clear')
+->middleware(['auth', 'verified']);
+
 require __DIR__.'/auth.php';
