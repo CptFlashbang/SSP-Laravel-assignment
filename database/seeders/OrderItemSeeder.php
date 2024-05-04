@@ -12,22 +12,27 @@ class OrderItemSeeder extends Seeder
      */
     public function run(): void
     {
-        // Let's assume we have some orders and pizzas
+        // Fetch all orders and pizzas with their details
         $orderIds = DB::table('orders')->pluck('id');
-        $pizzaIds = DB::table('pizzas')->pluck('id');
+        $pizzas = DB::table('pizzas')->get();  // Including price details
         $sizes = ['small', 'medium', 'large'];  // Available sizes
 
         // Example logic to assign pizzas to orders
         foreach ($orderIds as $orderId) {
             // Randomly select 1-3 pizzas per order
-            $selectedPizzas = $pizzaIds->random(rand(1, 3));
+            $selectedPizzas = $pizzas->random(rand(1, 3));
 
-            foreach ($selectedPizzas as $pizzaId) {
+            foreach ($selectedPizzas as $pizza) {
+                $size = $sizes[array_rand($sizes)];  // Randomly assign a size
+                $priceAttribute = ucfirst($size) . 'Price';  // Construct the attribute name for price based on size
+                $price = $pizza->$priceAttribute;  // Get the price from the pizza object dynamically
+
                 // Insert a new order item for each selected pizza
                 DB::table('order_items')->insert([
                     'order_id' => $orderId,
-                    'pizza_id' => $pizzaId,
-                    'size' => $sizes[array_rand($sizes)],  // Randomly assign a size
+                    'pizza_id' => $pizza->id,
+                    'size' => $size,
+                    'price' => $price,  // Use dynamically determined price based on size
                     'quantity' => rand(1, 4),  // Random quantity between 1 and 4
                     'created_at' => now(),
                     'updated_at' => now(),
