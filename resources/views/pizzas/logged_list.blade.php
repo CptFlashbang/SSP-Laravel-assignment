@@ -20,6 +20,12 @@
                 <div class="mt-4">
                     Price: <span id="price_{{ $pizza->id }}">£{{ number_format($pizza->SmallPrice, 2) }}</span>
                 </div>
+                <form action="{{ route('add-pizza-to-session', ['pizzaId' => $pizza->id]) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Add to Order
+                    </button>
+                </form>
             </div>
         </div>
     @endforeach
