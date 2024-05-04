@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pizza;
+use App\Models\Topping;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
@@ -22,6 +23,7 @@ class PizzaController extends Controller
     {
         return view('welcome', [
             'pizzas' => Pizza::with('toppings')->latest()->get(),
+            'toppings' => Topping::all()
         ]);
     }
 
