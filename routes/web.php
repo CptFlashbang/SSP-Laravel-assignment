@@ -30,14 +30,8 @@ Route::get('/', function (PizzaController $pizzaController, ToppingController $t
     ]);
 });
 
-Route::get('/dashboard', function (PizzaController $pizzaController, ToppingController $toppingController) {
-    $pizzas = $pizzaController->index();
-    $toppings = $toppingController->index();
-
-    return view('dashboard', [
-        'pizzas' => $pizzas,
-        'toppings' => $toppings
-    ]);
+Route::get('/dashboard', function () {
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
