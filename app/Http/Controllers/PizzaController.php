@@ -14,10 +14,20 @@ class PizzaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Collection
+    public function indexCollection(): Collection
     {
         $pizzas = Pizza::with('toppings')->latest()->get();
         return $pizzas;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function indexView(): View
+    {
+        return view('pizzas.index', [
+            'pizzas' => Pizza::with('toppings')->latest()->get()
+        ]);
     }
 
     /**
@@ -67,4 +77,17 @@ class PizzaController extends Controller
     {
         //
     }
+
+    /**
+    * Add the Chirp to Order
+    */
+   public function addToOrder(Chirp $chirp): RedirectResponse
+   {
+        $order = session('order', collect([]));
+        $order->push($chirp);
+        session(['order' => $order]);
+        return redirect(route('chirps.index'));
+
+
+   }
 }

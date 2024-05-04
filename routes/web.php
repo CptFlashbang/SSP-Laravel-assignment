@@ -21,7 +21,7 @@ use App\Http\Controllers\ToppingController;
 // });
 
 Route::get('/', function (PizzaController $pizzaController, ToppingController $toppingController) {
-    $pizzas = $pizzaController->index();
+    $pizzas = $pizzaController->indexCollection();
     $toppings = $toppingController->index();
 
     return view('welcome', [
@@ -41,7 +41,18 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('pizzas', PizzaController::class)
-    ->only(['index', 'store'])
+    ->only(['store'])
     ->middleware(['auth', 'verified']); 
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('pizzas', PizzaController::class)
+        ->only(['store']); // Only include store if it's the only standard method you need
+
+    Route::get('pizzas/collection', [PizzaController::class, 'indexCollection'])
+        ->name('pizzas.indexCollection');
+
+    Route::get('pizzas/view', [PizzaController::class, 'indexView'])
+        ->name('pizzas.indexView');
+});
 
 require __DIR__.'/auth.php';
