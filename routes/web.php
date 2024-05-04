@@ -21,8 +21,8 @@ use App\Http\Controllers\ToppingController;
 // });
 
 Route::get('/', function (PizzaController $pizzaController, ToppingController $toppingController) {
-    $pizzas = $pizzaController->index();    // This returns a Collection
-    $toppings = $toppingController->index(); // Adjust ToppingController similarly
+    $pizzas = $pizzaController->index();
+    $toppings = $toppingController->index();
 
     return view('welcome', [
         'pizzas' => $pizzas,
