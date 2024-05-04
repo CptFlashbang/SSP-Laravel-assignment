@@ -4,15 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Pizza;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class PizzaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('pizzas.list', [
+            'pizzas' => Pizza::with('toppings')->latest()->get(),
+        ]);
+    }
+    public function unlogged(): View
+    {
+        return view('welcome', [
+            'pizzas' => Pizza::with('toppings')->latest()->get(),
+        ]);
     }
 
     /**
