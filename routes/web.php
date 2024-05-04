@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\ToppingController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,10 @@ Route::get('/menu', function (PizzaController $pizzaController, ToppingControlle
         'toppings' => $toppings
     ]);
 })->middleware(['auth', 'verified'])->name('menu');
+
+Route::post('/add-pizza-to-session/{pizzaId}', [OrderController::class, 'addPizzaToSession'])->name('add-pizza-to-session');
+Route::get('/view-session-order', [OrderController::class, 'viewSessionOrder'])->name('view-session-order');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
