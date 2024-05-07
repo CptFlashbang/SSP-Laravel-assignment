@@ -11,6 +11,10 @@ class Order extends Model
 {
     use HasFactory;
 
+    
+    protected $fillable = ['user_id', 'collection']; // Ensure 'collection' is listed if using mass assignments
+    
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
