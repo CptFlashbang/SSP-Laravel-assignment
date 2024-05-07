@@ -117,7 +117,9 @@ class OrderController extends Controller
 
     public function clearSession(Request $request): RedirectResponse
     {
-        $request->session()->flush();
-        return redirect('/')->with('message', 'All session data cleared.');
+        // Remove only the 'order' from the session
+        $request->session()->forget('order');
+        
+        return redirect('/dashboard')->with('message', 'Order cleared from session.');
     }
 }
