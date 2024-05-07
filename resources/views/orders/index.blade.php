@@ -13,12 +13,16 @@
                     </div>
                 @endforeach
             </div>
+            <!-- Save Order Form -->
+            <form action="{{ route('order.save') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary">Save Order</button>
+            </form>
         @endif
+        <!-- Clear Order Form -->
         <form action="{{ route('session.clear') }}" method="POST">
             @csrf
             <button type="submit">Clear order data</button>
         </form>
     </div>
 </x-app-layout>
-
-
