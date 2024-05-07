@@ -89,9 +89,6 @@ class OrderController extends Controller
         return back()->with('success', 'Pizza added to order!');
     }
 
-
-
-
     public function viewSessionOrder(): View
     {
         $order = session('order'); // Retrieve the order from the session
@@ -121,5 +118,30 @@ class OrderController extends Controller
         $request->session()->forget('order');
         
         return redirect('/dashboard')->with('message', 'Order cleared from session.');
+    }
+
+    public function saveSessionOrderToDatabase(Request $request): RedirectResponse
+    {
+        // Retrieve the order from the session
+        $order = session('order');
+
+        // Check if there is an order in the session
+        if ($order) {
+            // Assuming $order is an object and needs to be re-saved or could be updated
+            // You might need to adjust how this is handled based on your actual data structure
+
+            // Save the order to the database
+            $dbOrder = new Order();
+            $dbOrder->user_id = $order->user_id;
+            $dbOrder->save();
+
+
+
+            // After saving, clear the order from the session
+            $this->clearSession($request);
+        }
+
+        // Redirect with a success message
+        return redirect('/dashboard')->with('success', 'Order has been saved and session cleared.');
     }
 }
