@@ -5,13 +5,18 @@
             <p>Your cart is empty.</p>
         @else
             <div class="list-group">
+                @php $totalCost = 0; @endphp  <!-- Initialize the total cost variable -->
                 @foreach ($pizzas as $item)
                     <div class="list-group-item">
                         <strong>{{ $item['size'] }} {{ $item['name'] }}</strong>
                         <p>Quantity: {{ $item['quantity'] }}</p>
                         <p>Price per item: £{{ number_format($item['price'], 2) }}</p>
+                        @php $totalCost += $item['price'] * $item['quantity']; @endphp <!-- Update total cost -->
                     </div>
                 @endforeach
+                <div class="list-group-item">
+                    <strong>Total Cost: £{{ number_format($totalCost, 2) }}</strong> <!-- Display the total cost -->
+                </div>
             </div>
             <!-- Save Order Form -->
             <form action="{{ route('order.save') }}" method="POST">
