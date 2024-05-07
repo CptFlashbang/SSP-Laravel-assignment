@@ -1,6 +1,9 @@
 <x-app-layout>
     <div class="container">
         <h1>Your Order</h1>
+        @php
+            dd(session('order'));
+        @endphp
         @if ($pizzas->isEmpty())
             <p>Your cart is empty.</p>
         @else
