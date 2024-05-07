@@ -48,6 +48,8 @@ Route::get('/menu', function (PizzaController $pizzaController, ToppingControlle
 Route::post('/add-pizza-to-session/{pizzaId}', [OrderController::class, 'addPizzaToSession'])->name('add-pizza-to-session');
 Route::get('/view-session-order', [OrderController::class, 'viewSessionOrder'])->name('view-session-order');
 Route::post('/save-order', [OrderController::class, 'saveSessionOrderToDatabase'])->name('order.save');
+Route::post('/update-delivery', [OrderController::class, 'updateDeliveryOption'])->name('order.update-delivery');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
