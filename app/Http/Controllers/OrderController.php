@@ -116,7 +116,7 @@ class OrderController extends Controller
     {
         // Remove only the 'order' from the session
         $request->session()->forget('order');
-        
+
         return redirect('/dashboard')->with('message', 'Order cleared from session.');
     }
 
@@ -143,5 +143,21 @@ class OrderController extends Controller
 
         // Redirect with a success message
         return redirect('/dashboard')->with('success', 'Order has been saved and session cleared.');
+    }
+
+    public function updateDeliveryOption(Request $request)
+    {
+        $order = session('order');
+        if (!$order) {
+            return back()->withErrors('No order found in session.');
+        }
+
+        $deliveryType = $request->input('delivery_type');
+        $order->collection = ($deliveryType === 'collection');
+
+        // Save any changes back to the session
+        session(['order' => $order]);
+
+        return back()->with('success', 'Delivery option updated.');
     }
 }
