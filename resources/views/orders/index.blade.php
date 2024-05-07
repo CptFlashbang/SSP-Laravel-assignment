@@ -16,7 +16,7 @@
         @endif
         <form action="{{ route('session.clear') }}" method="POST">
             @csrf
-            <button type="submit">Clear All Session Data</button>
+            <button type="submit">Clear order data</button>
         </form>
     </div>
 </x-app-layout>
