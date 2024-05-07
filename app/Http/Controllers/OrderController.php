@@ -71,8 +71,8 @@ class OrderController extends Controller
         $order = session('order');
         if (!$order) {
             $order = new Order();
-            // Assuming a user is logged in for simplicity
             $order->user_id = auth()->id();
+            $order->collection = true;  // Explicitly set the default value
             $order->save();
         }
 
