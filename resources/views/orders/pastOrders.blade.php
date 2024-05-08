@@ -14,7 +14,7 @@
                             @endif
                         @endforeach
                     </ul>
-                    <p>Total Price: ${{ number_format($order->total_price, 2) }}</p>
+                    <p>Total Price: ${{ number_format($order->totalPrice, 2) }}</p>
                 </div>
             @endforeach
         @endif
