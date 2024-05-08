@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Models\Pizza;
 use Illuminate\View\View;
@@ -157,17 +158,28 @@ class OrderController extends Controller
 
         // Check if there is an order in the session
         if ($order) {
-            // Assuming $order is an object and needs to be re-saved or could be updated
-            // You might need to adjust how this is handled based on your actual data structure
+            // Create a new Order instance or find an existing one by ID if you have it
+            $dbOrder = ($order->id) ? Order::find($order->id) : new Order();
 
-            // Save the order to the database
-            $dbOrder = new Order();
+            // Update or set properties
             $dbOrder->user_id = $order->user_id;
             $dbOrder->delivery = $order->delivery;
             $dbOrder->totalPrice = $order->totalPrice;
+
+            // Save the Order to ensure it has an ID for its relationships
             $dbOrder->save();
 
-
+            // Check and save each associated OrderItem
+            foreach ($order->orderItems as $item) {
+                // You can decide to find existing items or create new ones
+                $dbItem = new OrderItem(); // Assuming you want to add new items
+                $dbItem->order_id = $dbOrder->id;
+                $dbItem->pizza_id = $item->pizza_id;
+                $dbItem->size = $item->size;
+                $dbItem->price = $item->price;
+                $dbItem->quantity = $item->quantity;
+                $dbItem->save(); // Save each item
+            }
 
             // After saving, clear the order from the session
             $this->clearSession($request);
@@ -176,6 +188,7 @@ class OrderController extends Controller
         // Redirect with a success message
         return redirect('/dashboard')->with('success', 'Order has been saved and session cleared.');
     }
+
 
     public function updateDeliveryOption(Request $request)
     {
