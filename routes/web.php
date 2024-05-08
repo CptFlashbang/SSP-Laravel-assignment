@@ -54,6 +54,8 @@ Route::post('/add-pizza-to-session/{pizzaId}', [OrderController::class, 'addPizz
 Route::get('/view-session-order', [OrderController::class, 'viewSessionOrder'])->name('view-session-order');
 Route::post('/save-order', [OrderController::class, 'saveSessionOrderToDatabase'])->name('order.save');
 Route::post('/update-delivery', [OrderController::class, 'updateDeliveryOption'])->name('order.update-delivery');
+Route::post('/orders/reorder/{orderId}', [OrderController::class, 'reorderToSession'])->name('orders.reorderToSession');
+
 
 
 Route::middleware('auth')->group(function () {

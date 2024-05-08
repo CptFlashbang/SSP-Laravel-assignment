@@ -15,7 +15,12 @@
                         @endforeach
                     </ul>
                     <p>Total Price: ${{ number_format($order->totalPrice, 2) }}</p>
-                </div>
+                    <!-- Reorder Form -->
+                    <form action="{{ route('orders.reorderToSession', $order->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Reorder This Order</button>
+                    </form>
+                </div>                
             @endforeach
         @endif
     </div>
