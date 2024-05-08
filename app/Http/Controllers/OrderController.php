@@ -126,7 +126,7 @@ class OrderController extends Controller
         }
 
         // Pass items, total price, and delivery status to the view
-        return view('orders.index', [
+        return view('orders.basket', [
             'pizzas' => $items,
             'totalPrice' => $totalPrice,
             'isDelivery' => $isDelivery // Pass the delivery status to the view
