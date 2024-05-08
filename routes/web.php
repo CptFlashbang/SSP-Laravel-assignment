@@ -45,6 +45,11 @@ Route::get('/menu', function (PizzaController $pizzaController, ToppingControlle
     ]);
 })->middleware(['auth', 'verified'])->name('menu');
 
+Route::get('/previous-orders', [OrderController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('order.index');
+
+
 Route::post('/add-pizza-to-session/{pizzaId}', [OrderController::class, 'addPizzaToSession'])->name('add-pizza-to-session');
 Route::get('/view-session-order', [OrderController::class, 'viewSessionOrder'])->name('view-session-order');
 Route::post('/save-order', [OrderController::class, 'saveSessionOrderToDatabase'])->name('order.save');
