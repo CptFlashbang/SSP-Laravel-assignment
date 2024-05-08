@@ -72,7 +72,7 @@ class OrderController extends Controller
         if (!$order) {
             $order = new Order();
             $order->user_id = auth()->id();
-            $order->collection = true;  // Explicitly set the default value
+            $order->delivery = false;  // Explicitly set the default value
             $order->save();
         }
 
@@ -90,27 +90,38 @@ class OrderController extends Controller
     }
 
     public function viewSessionOrder(): View
-    {
-        $order = session('order'); // Retrieve the order from the session
-        $items = collect([]);
+{
+    $order = session('order'); // Retrieve the order from the session
+    $items = collect([]);
+    $totalPrice = 0; // Initialize the total price
 
-        if ($order) {
-            // Assuming $order is an instance of Order, or similar
-            // You would adapt this part based on how you've structured Order items in the session
-            foreach ($order->orderItems as $item) {
-                $items->push([
-                    'size' => $item->size,
-                    'name' => $item->pizza->name, // Access the associated Pizza
-                    'quantity' => $item->quantity,
-                    'price' => $item->price,
-                ]);
-            }
+    if ($order) {
+        // Assuming $order is an instance of Order, or similar
+        // You would adapt this part based on how you've structured Order items in the session
+        foreach ($order->orderItems as $item) {
+            $items->push([
+                'size' => $item->size,
+                'name' => $item->pizza->name, // Access the associated Pizza
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+            ]);
+            // Calculate total price by multiplying the price by quantity and summing it up
+            $totalPrice += $item->price * $item->quantity;
         }
 
-        return view('orders.index', [
-            'pizzas' => $items
-        ]);
+        // Add delivery charge if the order is for delivery (i.e., 'collection' attribute is false)
+        if (!$order->collection) {
+            $totalPrice += 5; // Adding a fixed £5 delivery charge
+        }
     }
+
+    // Pass both the items and total price to the view
+    return view('orders.index', [
+        'pizzas' => $items,
+        'totalPrice' => $totalPrice
+    ]);
+}
+
 
     public function clearSession(Request $request): RedirectResponse
     {
@@ -153,7 +164,7 @@ class OrderController extends Controller
         }
 
         $deliveryType = $request->input('delivery_type');
-        $order->collection = ($deliveryType === 'collection');
+        $order->delivery = ($deliveryType === 'delivery');
 
         // Save any changes back to the session
         session(['order' => $order]);
