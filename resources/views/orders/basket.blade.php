@@ -1,50 +1,50 @@
 <x-app-layout>
-    <div class="container">
-        <h1>Your Order</h1>
-        @php
-            dd(session('order'));
-        @endphp
+    <div class="max-w-4xl mx-auto p-4 bg-white shadow-md rounded-lg">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Your Order</h1>
+
         @if ($pizzas->isEmpty())
-            <p>Your cart is empty.</p>
+            <p class="text-gray-600">Your cart is empty.</p>
         @else
-            <div class="list-group">
+            <div class="space-y-2">
                 @foreach ($pizzas as $item)
-                    <div class="list-group-item">
-                        <strong>{{ $item['size'] }} {{ $item['name'] }}</strong>
-                        <p>Quantity: {{ $item['quantity'] }}</p>
-                        <p>Price per item: £{{ number_format($item['price'], 2) }}</p>
+                    <div class="p-4 bg-gray-100 rounded-md">
+                        <strong class="text-lg text-gray-700">{{ $item['size'] }} {{ $item['name'] }}</strong>
+                        <p class="text-gray-600">Quantity: {{ $item['quantity'] }}</p>
+                        <p class="text-gray-600">Price per item: £{{ number_format($item['price'], 2) }}</p>
                     </div>
                 @endforeach
-                <div class="list-group-item">
-                    <strong>Total Cost: £{{ number_format($totalPrice, 2) }}</strong> <!-- Display the calculated total cost -->
+                <div class="p-4 bg-gray-100 rounded-md">
+                    <strong class="text-lg text-gray-700">Total Cost: £{{ number_format($totalPrice, 2) }}</strong>
                 </div>
                 @if ($isDelivery)
-                    <p>Includes delivery charge of £5.00</p>
+                    <p class="text-gray-600">Includes delivery charge of £5.00</p>
                 @endif
             </div>
-            <!-- Update Delivery Option Form -->
-            <form action="{{ route('order.update-delivery') }}" method="POST">
+
+            <form action="{{ route('order.update-delivery') }}" method="POST" class="mt-4">
                 @csrf
-                <div>
-                    <label>
-                        <input type="radio" name="delivery_type" value="collection" {{ !$isDelivery ? 'checked' : '' }}> Collection
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center">
+                        <input type="radio" name="delivery_type" value="collection" class="text-indigo-600 focus:ring-indigo-500" {{ !$isDelivery ? 'checked' : '' }}>
+                        <span class="ml-2 text-sm text-gray-700">Collection</span>
                     </label>
-                    <label>
-                        <input type="radio" name="delivery_type" value="delivery" {{ $isDelivery ? 'checked' : '' }}> Delivery
+                    <label class="flex items-center">
+                        <input type="radio" name="delivery_type" value="delivery" class="text-indigo-600 focus:ring-indigo-500" {{ $isDelivery ? 'checked' : '' }}>
+                        <span class="ml-2 text-sm text-gray-700">Delivery</span>
                     </label>
-                    <button type="submit" class="btn btn-primary">Update Delivery Option</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Update Delivery Option</button>
                 </div>
             </form>
-            <!-- Save Order Form -->
-            <form action="{{ route('order.save') }}" method="POST">
+
+            <form action="{{ route('order.save') }}" method="POST" class="mt-4">
                 @csrf
-                <button type="submit" class="btn btn-primary">Save Order</button>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Save Order</button>
+            </form>
+
+            <form action="{{ route('session.clear') }}" method="POST" class="mt-4">
+                @csrf
+                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Clear Order Data</button>
             </form>
         @endif
-        <!-- Clear Order Form -->
-        <form action="{{ route('session.clear') }}" method="POST">
-            @csrf
-            <button type="submit">Clear order data</button>
-        </form>
     </div>
 </x-app-layout>
