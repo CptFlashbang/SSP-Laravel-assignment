@@ -12,6 +12,8 @@ return new class extends Migration
             $table->id();  // Single primary key for each order-pizza relationship
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->foreignId('pizza_id')->constrained('pizzas')->onDelete('cascade');
+            $table->double('price')->default('0.00');
+            $table->string('size')->default('small');
             $table->integer('quantity')->default(1);  // Store quantity of each pizza in the order
             $table->timestamps();
         });

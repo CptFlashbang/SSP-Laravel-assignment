@@ -2,22 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pizza;
-use App\Models\Topping;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\View\View;
-use Illuminate\Database\Eloquent\Collection;
 
-class PizzaController extends Controller
+class OrderItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Collection
+    public function index()
     {
-        $pizzas = Pizza::with('toppings')->latest()->get();
-        return $pizzas;
+        //
     }
 
     /**
@@ -39,7 +33,7 @@ class PizzaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pizza $pizza)
+    public function show(string $id)
     {
         //
     }
@@ -47,7 +41,7 @@ class PizzaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pizza $pizza)
+    public function edit(string $id)
     {
         //
     }
@@ -55,7 +49,7 @@ class PizzaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pizza $pizza)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -63,10 +57,8 @@ class PizzaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pizza $pizza)
+    public function destroy(string $id)
     {
         //
     }
-
-    
 }

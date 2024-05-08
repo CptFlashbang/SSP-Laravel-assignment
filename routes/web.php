@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\ToppingController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,29 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/menu', function (PizzaController $pizzaController, ToppingController $toppingController) {
+    $pizzas = $pizzaController->index();
+    $toppings = $toppingController->index();
+
+    return view('pizzas.index', [
+        'pizzas' => $pizzas,
+        'toppings' => $toppings
+    ]);
+})->middleware(['auth', 'verified'])->name('menu');
+
+Route::get('/previous-orders', [OrderController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('order.index');
+
+
+Route::post('/add-pizza-to-session/{pizzaId}', [OrderController::class, 'addPizzaToSession'])->name('add-pizza-to-session');
+Route::get('/view-session-order', [OrderController::class, 'viewSessionOrder'])->name('view-session-order');
+Route::post('/save-order', [OrderController::class, 'saveSessionOrderToDatabase'])->name('order.save');
+Route::post('/update-delivery', [OrderController::class, 'updateDeliveryOption'])->name('order.update-delivery');
+Route::post('/orders/reorder/{orderId}', [OrderController::class, 'reorderToSession'])->name('orders.reorderToSession');
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -43,5 +67,9 @@ Route::middleware('auth')->group(function () {
 Route::resource('pizzas', PizzaController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']); 
+
+Route::post('session/clear', [OrderController::class, 'clearSession'])
+->name('session.clear')
+->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
