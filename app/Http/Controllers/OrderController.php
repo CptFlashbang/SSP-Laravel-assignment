@@ -83,9 +83,11 @@ class OrderController extends Controller
     {
         $order = session('order');
         if (!$order) {
+            $totalPrice = 0;
             $order = new Order();
             $order->user_id = auth()->id();
             $order->delivery = false;  // Explicitly set the default value
+            $order->$totalPrice;
             $order->save();
         }
 
@@ -93,7 +95,7 @@ class OrderController extends Controller
         $pizza = Pizza::findOrFail($pizzaId);
         $size = $request->input('size', 'small');
         $price = $request->input('price', $pizza->SmallPrice);
-
+        $order->$totalPrice =+ $price;
         $order->addOrUpdatePizza($order, $pizza, $size, $price);
 
         // Save the updated order back into the session
