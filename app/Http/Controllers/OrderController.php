@@ -16,16 +16,20 @@ class OrderController extends Controller
     public function index()
     {
         // Check if the user is logged in
-        if (!Auth::check()) {
-            return redirect('login')->with('error', 'You need to login to see this page.');
+        $user = auth()->user(); // Retrieve the user model directly
+
+        // Ensure that the user is logged in
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'You need to be logged in to view orders.');
         }
 
         // Retrieve all orders for the logged-in user
-        $orders = Auth::user()->orders;
+        $orders = $user->orders;
 
-        // Return the orders to the view (assuming you are using a view to display them)
-        return view('orders.index', ['orders' => $orders]);
+        // Return the orders to the view
+        return view('orders.pastOrders', ['orders' => $orders]);
     }
+
 
     /**
      * Show the form for creating a new resource.
