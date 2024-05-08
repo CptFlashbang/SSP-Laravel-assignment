@@ -44,10 +44,7 @@ class Order extends Model
                 'uniqueIdentifier' => $uniqueIdentifier
             ]);
             $order->orderItems->push($item);
-        
-
-        // Optionally, if you're tracking totalPrice in the Order, update it here
-        $order->totalPrice += $price;
+    
         $order->save(); // Save any updates to the order itself
     }
 }
