@@ -44,10 +44,12 @@ class Order extends Model
                 'uniqueIdentifier' => $uniqueIdentifier
             ]);
             $order->orderItems->push($item);
-        }
+        
 
-        // Now, explicitly save each item (if you want them in the database)
-        $item->save();  // This line will save the OrderItem to the database
+        // Optionally, if you're tracking totalPrice in the Order, update it here
+        $order->totalPrice += $price;
+        $order->save(); // Save any updates to the order itself
     }
+}
 
 }
