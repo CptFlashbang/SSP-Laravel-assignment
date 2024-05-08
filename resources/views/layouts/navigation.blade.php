@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('view-session-order')" :active="request()->routeIs('view-session-order')">
                         {{ __('Basket') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
+                        {{ __('Previous orders') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -81,6 +84,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('view-session-order')" :active="request()->routeIs('view-session-order')">
                 {{ __('Basket') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
+                {{ __('Previous orders') }}
             </x-responsive-nav-link>
         </div>
 
