@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('delivery')->default(false);
+            $table->double('totalPrice')->default('0.00');
             $table->timestamps();
         });
     }
