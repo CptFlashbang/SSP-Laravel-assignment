@@ -128,9 +128,11 @@ class OrderController extends Controller
 
             // Check if the order is for delivery
             $isDelivery = $order->delivery;
+            $totalPrice = $order->totalPrice; 
             if ($isDelivery) {
-                $totalPrice += 5; // Adding a fixed £5 delivery charge
+            $totalPrice += 5; // Adding a fixed £5 delivery charge
             }
+            $order->totalPrice= $totalPrice;
         }
 
         // Pass items, total price, and delivery status to the view
@@ -199,6 +201,14 @@ class OrderController extends Controller
 
         $deliveryType = $request->input('delivery_type');
         $order->delivery = ($deliveryType === 'delivery');
+
+        // // Check if the order is for delivery
+        // $isDelivery = $order->delivery;
+        // $totalPrice = $order->totalPrice; 
+        // if ($isDelivery) {
+        //     $totalPrice += 5; // Adding a fixed £5 delivery charge
+        // }
+        // $order->totalPrice= $totalPrice;
 
         // Save any changes back to the session
         session(['order' => $order]);
