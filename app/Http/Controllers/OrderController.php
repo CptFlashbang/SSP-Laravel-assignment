@@ -87,15 +87,15 @@ class OrderController extends Controller
             $order = new Order();
             $order->user_id = auth()->id();
             $order->delivery = false;  // Explicitly set the default value
-            $order->$totalPrice;
-            $order->save();
+            $order->totalPrice = $totalPrice; // Correctly initializing totalPrice
+            $order->save();  // Save the order to obtain an order_id
         }
 
         // Add pizza to the order
         $pizza = Pizza::findOrFail($pizzaId);
         $size = $request->input('size', 'small');
         $price = $request->input('price', $pizza->SmallPrice);
-        $order->$totalPrice =+ $price;
+        $order->totalPrice += $price; // Correctly incrementing totalPrice
         $order->addOrUpdatePizza($order, $pizza, $size, $price);
 
         // Save the updated order back into the session
@@ -103,6 +103,7 @@ class OrderController extends Controller
 
         return back()->with('success', 'Pizza added to order!');
     }
+
 
     public function viewSessionOrder(): View
     {
@@ -162,6 +163,8 @@ class OrderController extends Controller
             // Save the order to the database
             $dbOrder = new Order();
             $dbOrder->user_id = $order->user_id;
+            $dbOrder->delivery = $order->delivery;
+            $dbOrder->totalPrice = $order->totalPrice;
             $dbOrder->save();
 
 
@@ -189,4 +192,19 @@ class OrderController extends Controller
 
         return back()->with('success', 'Delivery option updated.');
     }
+
+    public function reorderToSession($orderId)
+    {
+        $order = Order::with('orderItems.pizza')->find($orderId);
+
+        if (!$order) {
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+
+        // Store the entire order object in the session
+        session(['order' => $order]);
+
+        return redirect()->route('view-session-order')->with('success', 'Order loaded. You can now modify or confirm your order!');
+    }
+
 }
