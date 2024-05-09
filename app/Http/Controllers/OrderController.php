@@ -160,8 +160,8 @@ class OrderController extends Controller
         // Check if there is an order in the session
         if ($order) {
             // // Create a new Order instance or find an existing one by ID if you have it
-            // $dbOrder = ($order->id) ? Order::find($order->id) : new Order();
-            $dbOrder = new Order();
+            $dbOrder = ($order->id) ? Order::find($order->id) : new Order();
+            // $dbOrder = new Order();
 
             // Update or set properties
             $dbOrder->user_id = $order->user_id;
