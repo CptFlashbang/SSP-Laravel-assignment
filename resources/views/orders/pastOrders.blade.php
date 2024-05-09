@@ -11,9 +11,7 @@
                         <h2 class="text-lg font-semibold text-gray-700 mb-2">Order placed on: {{ $order->created_at->format('M d, Y') }}</h2>
                         <ul class="list-disc pl-5 text-gray-600">
                             @foreach ($order->orderItems as $item)
-                                @if($item->pizza)
-                                    <li>{{ $item->pizza->size }} - {{ $item->pizza->name }}</li>
-                                @endif
+                                    <li>{{ $item->size }} - {{ $item->pizza->name }}</li>
                             @endforeach
                         </ul>
                         <p class="text-gray-700">Total Price: ${{ number_format($order->totalPrice, 2) }}</p>
