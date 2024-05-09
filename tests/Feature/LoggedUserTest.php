@@ -52,4 +52,18 @@ class LoggedUserTest extends TestCase
         // Assert: Verify that toppings are passed to the view
         $response->assertViewHas('toppings');
     }
+
+    public function test_orders_page_loads()
+    {
+        // Prepare: Ensure the user is verified
+        $this->user->email_verified_at = now();  // Ensure the user is verified
+        $this->user->save();
+
+        // Act: Make a GET request to the previous-orders page as an authenticated and verified user
+        $response = $this->actingAs($this->user)->get('/previous-orders');
+
+        // Assert: Check for the correct view and the existence of orders
+        $response->assertViewIs('orders.pastOrders');  // Correct the view name to match the controller output
+        $response->assertViewHas('orders');  // Ensure that 'orders' data is passed to the view
+    }
 }
