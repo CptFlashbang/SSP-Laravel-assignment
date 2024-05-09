@@ -14,7 +14,7 @@
                                     <li>{{ $item->size }} - {{ $item->pizza->name }}</li>
                             @endforeach
                         </ul>
-                        <p class="text-gray-700">Total Price: ${{ number_format($order->totalPrice, 2) }}</p>
+                        <p class="text-gray-700">Total Price: £{{ number_format($order->totalPrice, 2) }}</p>
                         <form action="{{ route('orders.reorderToSession', $order->id) }}" method="POST" class="mt-3">
                             @csrf
                             <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Reorder This Order</button>
