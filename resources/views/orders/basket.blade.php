@@ -9,7 +9,6 @@
                 @foreach ($pizzas as $item)
                     <div class="p-4 bg-gray-100 rounded-md">
                         <strong class="text-lg text-gray-700">{{ $item['size'] }} {{ $item['name'] }}</strong>
-                        <p class="text-gray-600">Quantity: {{ $item['quantity'] }}</p>
                         <p class="text-gray-600">Price per item: £{{ number_format($item['price'], 2) }}</p>
                     </div>
                 @endforeach

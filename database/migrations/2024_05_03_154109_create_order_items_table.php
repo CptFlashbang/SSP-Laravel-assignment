@@ -14,7 +14,6 @@ return new class extends Migration
             $table->foreignId('pizza_id')->constrained('pizzas')->onDelete('cascade');
             $table->double('price')->default('0.00');
             $table->string('size')->default('small');
-            $table->integer('quantity')->default(1);  // Store quantity of each pizza in the order
             $table->timestamps();
         });
     }

@@ -28,8 +28,7 @@ class OrderItemSeeder extends Seeder
                 $priceAttribute = ucfirst($size) . 'Price';  // Construct the attribute name for price based on size
                 $price = $pizza->$priceAttribute;  // Get the price from the pizza object dynamically
 
-                $quantity = rand(1, 4);  // Random quantity between 1 and 4
-                $totalPrice += $price * $quantity;  // Accumulate the total price
+                $totalPrice += $price;  // Accumulate the total price
 
                 // Insert a new order item for each selected pizza
                 DB::table('order_items')->insert([
@@ -37,7 +36,6 @@ class OrderItemSeeder extends Seeder
                     'pizza_id' => $pizza->id,
                     'size' => $size,
                     'price' => $price,  // Use dynamically determined price based on size
-                    'quantity' => $quantity,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

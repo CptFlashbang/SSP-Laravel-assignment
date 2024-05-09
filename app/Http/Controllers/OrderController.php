@@ -119,11 +119,10 @@ class OrderController extends Controller
                 $items->push([
                     'size' => $item->size,
                     'name' => $item->pizza->name, // Access the associated Pizza
-                    'quantity' => $item->quantity,
                     'price' => $item->price,
                 ]);
-                // Calculate total price by multiplying the price by quantity and summing it up
-                $totalPrice += $item->price * $item->quantity;
+                // Calculate total price and summing it up
+                $totalPrice += $item->price;
             }
 
             // Check if the order is for delivery
@@ -180,7 +179,6 @@ class OrderController extends Controller
                 $dbItem->pizza_id = $item->pizza_id;
                 $dbItem->size = $item->size;
                 $dbItem->price = $item->price;
-                $dbItem->quantity = $item->quantity;
                 $dbItem->save(); // Save each item
             }
 

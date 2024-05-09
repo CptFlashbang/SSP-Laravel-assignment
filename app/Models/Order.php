@@ -33,14 +33,12 @@ class Order extends Model
         });
 
         if ($item) {
-            $item->quantity += 1;
         } else {
             $item = new OrderItem([
                 'order_id' => $order->id,  // Ensure this is included
                 'pizza_id' => $pizza->id,
                 'size' => $size,
                 'price' => $price,
-                'quantity' => 1,
                 'uniqueIdentifier' => $uniqueIdentifier
             ]);
             $order->orderItems->push($item);
